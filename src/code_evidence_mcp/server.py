@@ -2,7 +2,7 @@ from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 
-from .indexer import index_python
+from .indexer import index_repository
 
 mcp = FastMCP("code-evidence")
 _graph = None
@@ -10,12 +10,12 @@ _graph = None
 
 @mcp.tool()
 def index_repository(path: str) -> dict:
-    """Index a local Python repository into an evidence graph."""
+    """Index a local Python/Go repository into an evidence graph."""
     global _graph
     root = Path(path).expanduser().resolve()
     if not root.is_dir():
         raise ValueError(f"Repository path does not exist: {root}")
-    _graph = index_python(root)
+    _graph = index_repository(root)
     return {"repository": str(root), "evidence_edges": len(_graph.edges)}
 
 
