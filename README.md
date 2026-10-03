@@ -59,7 +59,7 @@ Semantic similarity is useful for retrieval, but similarity is not proof of impa
 - [ ] repository registration and persistence
 - [ ] Git diff → changed-symbol mapping
 - [ ] CODEOWNERS / OpenAPI / AsyncAPI evidence
-- [ ] MCP Inspector reproducibility fixture
+- [x] MCP Inspector reproducibility fixture
 
 ## Status
 
