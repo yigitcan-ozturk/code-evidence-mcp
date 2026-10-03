@@ -92,7 +92,9 @@ def _call_target(node, source: bytes) -> str | None:
     if function.type in {"identifier"}:
         return _text(function, source)
     if function.type in {"attribute", "selector_expression"}:
-        attr = function.child_by_field_name("attribute") or function.child_by_field_name("field")
-        if attr:
+        attr = function.child_by_field_name("attribute")
+        if attr is None:
+            attr = function.child_by_field_name("field")
+        if attr is not None:
             return _text(attr, source)
     return None
