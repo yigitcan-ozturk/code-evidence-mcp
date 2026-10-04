@@ -9,7 +9,7 @@ def test_deterministic_call_evidence(tmp_path: Path):
         encoding="utf-8",
     )
     graph = index_repository(tmp_path)
-    impacts = graph.impacts("sample.py:caller")
+    impacts = graph.dependencies("sample.py:caller")
     assert len(impacts) == 1
     assert impacts[0].target == "sample.py:target"
     assert impacts[0].relation == "calls"
@@ -22,6 +22,6 @@ def test_python_attribute_call_resolves_known_symbol(tmp_path: Path):
         encoding="utf-8",
     )
     graph = index_repository(tmp_path)
-    impacts = graph.impacts("sample.py:caller")
+    impacts = graph.dependencies("sample.py:caller")
     assert len(impacts) == 1
     assert impacts[0].target == "sample.py:target"
