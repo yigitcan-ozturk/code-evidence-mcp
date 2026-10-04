@@ -18,8 +18,8 @@ class EvidenceGraph:
         if edge not in self.edges:
             self.edges.append(edge)
 
-    def impacts(self, symbol: str) -> list[Evidence]:
-        """Return evidence whose source is directly or transitively reachable."""
+    def dependencies(self, symbol: str) -> list[Evidence]:
+        """Return evidence for symbols this symbol directly/transitively depends on."""
         result: list[Evidence] = []
         frontier = [symbol]
         seen = {symbol}
@@ -31,4 +31,19 @@ class EvidenceGraph:
                     if edge.target not in seen:
                         seen.add(edge.target)
                         frontier.append(edge.target)
+        return result
+
+    def impacts(self, symbol: str) -> list[Evidence]:
+        """Return evidence for callers directly/transitively affected by a changed symbol."""
+        result: list[Evidence] = []
+        frontier = [symbol]
+        seen = {symbol}
+        while frontier:
+            current = frontier.pop(0)
+            for edge in self.edges:
+                if edge.target == current and edge not in result:
+                    result.append(edge)
+                    if edge.source not in seen:
+                        seen.add(edge.source)
+                        frontier.append(edge.source)
         return result
