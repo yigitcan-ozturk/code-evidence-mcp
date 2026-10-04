@@ -2,7 +2,7 @@ from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
 
-from .indexer import index_repository
+from .indexer import index_repository as build_evidence_graph
 
 mcp = FastMCP("code-evidence")
 _graph = None
@@ -15,13 +15,13 @@ def index_repository(path: str) -> dict:
     root = Path(path).expanduser().resolve()
     if not root.is_dir():
         raise ValueError(f"Repository path does not exist: {root}")
-    _graph = index_repository(root)
+    _graph = build_evidence_graph(root)
     return {"repository": str(root), "evidence_edges": len(_graph.edges)}
 
 
 @mcp.tool()
 def explain_change_impact(symbol: str) -> dict:
-    """Explain deterministic downstream impact and return supporting evidence."""
+    """Explain callers directly/transitively affected by a changed symbol."""
     if _graph is None:
         raise ValueError("No repository indexed. Call index_repository first.")
     edges = _graph.impacts(symbol)
